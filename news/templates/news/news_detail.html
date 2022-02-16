@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block context %}
+<div class="container mt-3">
+    <h1>{{ news.title }}</h1>
+    <br><br>
+    <div class="raw">
+        <div class="card mb-3">
+            <div class="card-header">
+                Категория: {{ item.category }}
+            </div>
+            <div class="media">
+                {% if news.photo%}
+                    <img src="{{ news.photo.url}}" alt="{{ item.title }} picture" width="300" class="mr-3">
+                {% else %}
+                    <img src="https://s1.1zoom.me/b5050/4/Cats_Kittens_Ginger_484195_3840x2400.jpg" alt="kitten" width="300" class="mr-3">
+                {% endif %}
+                <div class="media-body">
+                    <h5 class="mt-0">{{ news.title }}</h5>
+                    <p>{{ news.content }}</p>
+                    <a href="/" class="btn btn-primary">Все новости</a><br><br>
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                Опубликовано: {{ news.created_at|date:'d.m.Y H:i' }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
