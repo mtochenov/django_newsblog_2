@@ -9,7 +9,6 @@ class News(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Обновлено')
     photo = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name='фото', blank=True)
-    # Для photo нужно указать путь сохранения файлов: в settings.py указать: MEDIA_ROOT и MEDIA_URL
     category = models.ForeignKey('Category', on_delete=models.PROTECT, null=True, verbose_name='Категория')
     is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
@@ -19,8 +18,6 @@ class News(models.Model):
 
     def get_absolute_url(self):
         return reverse('news_detail', kwargs={'pk': self.pk})
-        # get_absolute_url делает тоже, что и функция url в html {% url 'news_detail' item.pk %}
-        # return f"/post_list/{self.pk}"  это уже не актуально
         
     class Meta:
         verbose_name = 'Новость'
@@ -36,7 +33,6 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('category', kwargs={'category_id': self.pk})
-        # {{item.get_absolute_url}}
 
     class Meta:
         verbose_name = 'Категория'
