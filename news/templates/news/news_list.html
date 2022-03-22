@@ -1,32 +1,35 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}Новости{% endblock %}
 
 {% block sidebar %}
-{% include 'inc/_sidebar.html' %}
+    {% include 'inc/_sidebar.html' %}
 {% endblock %}
+
+{% block headline %}Новости{% endblock %}
 
 {% block context %}
 {% if news %}
     {% for item in news %}
         <div class="card mb-3">
             <div class="card-header">
-                Категория: {{ item.category }}
+                Опубликовано: {{ item.created_at|date:'d.m.Y H:i' }} | Категория: {{ item.category }} | Автор: {{ item.user }}
             </div>
-                <div class="media">
+            <div class="media">
+                <h5 class="mt-0">{{ item.title }}</h5>
+                <p>
                     {% if item.photo %}
-                        <img src="{{ item.photo.url}}" alt="{{ item.title }} picture" width="300">
+                        <img src="{{ item.photo.url }}" alt="{{ item.title }} picture"
+                             width="300" class="mr-3" align="left" vspace="5" hspace="5">
                     {% else %}
-                        <img src="https://s1.1zoom.me/b5050/4/Cats_Kittens_Ginger_484195_3840x2400.jpg" alt="kitten" width="300">
+                        <img src="https://s1.1zoom.me/b5050/4/Cats_Kittens_Ginger_484195_3840x2400.jpg" alt="default_kitten"
+                            width="300" class="mr-3"align="left" vspace="5" hspace="5">
                     {% endif %}
-                    <div class="media-body">
-                        <h5 class="mt-0">{{ item.title }}</h5>
-                        <p>{{ item.content|truncatewords:100 }}</p>
-                        <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Подробнее...</a><br><br>
-                    </div>
-                </div>
+                    {{ item.content|truncatewords:100 }}
+                </p>
+            </div>
             <div class="card-footer text-muted">
-                Опубликовано: {{ item.created_at|date:'d.m.Y H:i' }}
+                <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Подробнее...</a>
             </div>
         </div>
     {% endfor%}

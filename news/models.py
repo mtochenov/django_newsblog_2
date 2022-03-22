@@ -36,7 +36,7 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('category', kwargs={'category_id': self.pk})
-        # {{item.get_absolute_url}}  TODO: задействовать шаблон ссылки после введения соответстующего класса во views
+        # {{item.get_absolute_url}}
 
     class Meta:
         verbose_name = 'Категория'

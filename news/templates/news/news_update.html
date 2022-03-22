@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Изменить новость{% endblock %}
+
+{% block sidebar %}
+    {% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block headline %}
+    Изменить новость: {{ news.title }}
+{% endblock %}
+
+
+{% block context %}
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        {{ form.non_filed.errors }}
+
+        <button type="submit" class="btn btn-primary">Изменить новость</button>
+    </form>
+{% endblock %}
