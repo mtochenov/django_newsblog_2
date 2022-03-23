@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'djoser',
 
     'news.apps.NewsConfig',  # Указываем полный путь до настроек приложения
+    'accounts',
     'api',
 ]
 
