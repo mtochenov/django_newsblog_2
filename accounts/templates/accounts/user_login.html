@@ -11,5 +11,9 @@
 {% endblock %}
 
 {% block context %}
-    <p>форма логина</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-outline-primary">Войти</button>
+    </form>
 {% endblock %}
