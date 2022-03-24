@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'djoser',
 
     'news.apps.NewsConfig',
+    'accounts',
     'api',
 ]
 
