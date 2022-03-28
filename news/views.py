@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.base import ContextMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from .forms import NewsForm
 from .models import News, Category
@@ -38,26 +39,28 @@ class NewsDetailView(BaseMixin, DetailView):
     context_object_name = "news"
 
 
-class NewsCreateView(BaseMixin, CreateView):
+class NewsCreateView(LoginRequiredMixin, BaseMixin, CreateView):
     form_class = NewsForm
     template_name = 'news/news_create.html'
+    login_url = reverse_lazy('registration')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(NewsCreateView, self).form_valid(form)
 
 
-class NewsUpdateView(BaseMixin, UpdateView):
+class NewsUpdateView(LoginRequiredMixin, BaseMixin, UpdateView):  # PermissionRequiredMixin
     form_class = NewsForm
     model = News
     template_name = 'news/news_update.html'
+    # permission_required = 'news.change_news'  # TODO: Указать доступ только для атора или для администратора
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(NewsUpdateView, self).form_valid(form)
 
 
-class NewsDeleteView(BaseMixin, DeleteView):
+class NewsDeleteView(LoginRequiredMixin, BaseMixin, DeleteView):
     model = News
     template_name = 'news/news_delete.html'
     context_object_name = 'news'

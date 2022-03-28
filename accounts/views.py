@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from .forms import UserRegistrationForm, UserLoginForm
-from django.contrib.auth import login,logout
+from django.contrib.auth import login, logout
 
 
 def registration_view(request):
@@ -32,3 +32,7 @@ def user_login_view(request):
         form = UserLoginForm()
     return render(request, 'accounts/user_login.html', {'form': form})
 
+
+def user_logout_view(request):
+    logout(request)
+    return redirect('user_login')
