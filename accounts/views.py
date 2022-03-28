@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from .forms import UserRegistrationForm, UserLoginForm
-from django.contrib.auth import login,logout
+from django.contrib.auth import login, logout
 
 
 def registration_view(request):
