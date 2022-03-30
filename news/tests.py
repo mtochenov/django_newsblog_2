@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from .models import News, Category
+
 from .views import *
 
 
@@ -26,6 +26,6 @@ class TestUrls(TestCase):
         url = reverse('news_update', kwargs={'pk': 25})
         self.assertEquals(resolve(url).func.view_class, NewsUpdateView)
 
-    def test_news_update_resolved(self):
-        url = reverse('news_update', kwargs={'pk': 25})
-        self.assertEquals(resolve(url).func.view_class, NewsUpdateView)
+    def test_news_delete_resolved(self):
+        url = reverse('news_delete', kwargs={'pk': 25})
+        self.assertEquals(resolve(url).func.view_class, NewsDeleteView)
