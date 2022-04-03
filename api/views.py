@@ -1,6 +1,6 @@
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 
-from news.models import News, Category
+from news.models import News
 
 from rest_framework import generics, viewsets
 
@@ -8,22 +8,28 @@ from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .serializers import NewsSerializer
 
 
-class NewsAPIList(generics.ListCreateAPIView):
+class NewsAPIList(generics.ListCreateAPIView):  # GET, POST requests
     queryset = News.objects.all()
     serializer_class = NewsSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
 
 
-class NewsAPIUpdate(generics.RetrieveUpdateAPIView):
+class NewsAPIDetail(generics.RetrieveUpdateDestroyAPIView):  # GET, PUT, PATCH, DELETE requests
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    permission_classes = (IsOwnerOrReadOnly, )  # this class include IsAdminUser class
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
-
-class NewsAPIDestroy(generics.RetrieveDestroyAPIView):
-    queryset = News.objects.all()
-    serializer_class = NewsSerializer
-    permission_classes = (IsAdminOrReadOnly, )
+# class NewsAPIUpdate(generics.RetrieveUpdateAPIView):  # GET, PUT, PATCH requests
+#     queryset = News.objects.all()
+#     serializer_class = NewsSerializer
+#     # permission_classes = (IsOwnerOrReadOnly, )  # this class include IsAdminUser class
+#
+#
+# class NewsAPIDestroy(generics.RetrieveDestroyAPIView):  # GET, DELETE requests
+#     # RetrieveUpdateDestroyAPIView GET, PUT, PATCH, DELETE requests
+#     queryset = News.objects.all()
+#     serializer_class = NewsSerializer
+#     # permission_classes = (IsAdminOrReadOnly, )
 
 
 # class NewsListAPIView(generics.ListAPIView):  # Обычное представление для API
