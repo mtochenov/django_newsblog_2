@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.base import ContextMixin
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .forms import NewsForm
 from .models import News, Category
@@ -30,7 +30,7 @@ class NewsListView(BaseMixin, ListView):  # Заменяем get_context_data н
 
     # template_name = "news/news_list.html"  # переопределяем имя шаблона по-умолчанию, хотя в данном случае он так и называется
     # template_name по-умолчаию фомаируется так: назавание приложения в django/название модели в нижнем регистре_list.html
-    context_object_name = "news"  # переопределяем object-name, по-умолчинию - 'object_list'
+    context_object_name = 'news'  # переопределяем object-name, по-умолчинию - 'object_list'
     # extra_context = {'title': 'Новости'}  # Только для статичных данных
     paginate_by = 99  # определяем ограничитель количества выводимых объектов
 
@@ -51,7 +51,7 @@ class NewsListView(BaseMixin, ListView):  # Заменяем get_context_data н
 class NewsDetailView(BaseMixin, DetailView):
     model = News
     # template_name = "news/news_detail.html"  # переопределяем имя шаблона по-умолчанию, хотя в данном случае он так и называется
-    context_object_name = "news"  # переопределяем object-name, по-умолчинию - 'object'
+    context_object_name = 'news'  # переопределяем object-name, по-умолчинию - 'object'
     # вот - все что нужно для использования данного класса - это задать модель
 
 
@@ -65,15 +65,19 @@ class NewsCreateView(LoginRequiredMixin, BaseMixin, CreateView):
         return super(NewsCreateView, self).form_valid(form)
 
 
-class NewsUpdateView(LoginRequiredMixin, BaseMixin, UpdateView):  # PermissionRequiredMixin
+class NewsUpdateView(UserPassesTestMixin, BaseMixin, UpdateView):  # PermissionsMixin
     form_class = NewsForm
     model = News
     template_name = 'news/news_update.html'
-    # permission_required = 'news.change_news'  # TODO: Указать доступ только для атора или для администратора
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(NewsUpdateView, self).form_valid(form)
+
+    def test_func(self):  # TODO: Добавить доступ для администратора
+        """Using UserPassesTestMixin to provide access for author"""
+        news = self.get_object()
+        return news.user == self.request.user
 
 
 class NewsDeleteView(LoginRequiredMixin, BaseMixin, DeleteView):
