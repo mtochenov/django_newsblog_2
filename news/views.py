@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.base import ContextMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 
 from .forms import NewsForm
 from .models import News, Category
@@ -49,7 +50,7 @@ class NewsCreateView(LoginRequiredMixin, BaseMixin, CreateView):
         return super(NewsCreateView, self).form_valid(form)
 
 
-class NewsUpdateView(LoginRequiredMixin, BaseMixin, UpdateView):
+class NewsUpdateView(UserPassesTestMixin, BaseMixin, UpdateView):
     form_class = NewsForm
     model = News
     template_name = 'news/news_update.html'
@@ -57,6 +58,11 @@ class NewsUpdateView(LoginRequiredMixin, BaseMixin, UpdateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(NewsUpdateView, self).form_valid(form)
+
+    def test_func(self):
+        """Using UserPassesTestMixin to provide access for author"""
+        news = self.get_object()
+        return news.user == self.request.user
 
 
 class NewsDeleteView(LoginRequiredMixin, BaseMixin, DeleteView):
