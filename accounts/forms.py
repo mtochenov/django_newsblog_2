@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 class UserRegistrationForm(UserCreationForm):
     username = forms.CharField(label='Имя пользователя', help_text='Укажите оригинальное имя',
-                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ведите пароль'}))
+                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ведите имя пользователя'}))
     email = forms.EmailField(label='email',
                              widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Ведите ваш email'}))
     password1 = forms.CharField(label='Пароль',

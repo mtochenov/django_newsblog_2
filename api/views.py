@@ -17,7 +17,8 @@ class NewsAPIList(generics.ListCreateAPIView):  # GET, POST requests
 class NewsAPIDetail(generics.RetrieveUpdateDestroyAPIView):  # GET, PUT, PATCH, DELETE requests
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsOwnerOrReadOnly, )
+
 
 # class NewsAPIUpdate(generics.RetrieveUpdateAPIView):  # GET, PUT, PATCH requests
 #     queryset = News.objects.all()
