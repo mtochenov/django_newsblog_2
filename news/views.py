@@ -18,6 +18,13 @@ class BaseMixin(ContextMixin):
         return context
 
 
+class BasePermission(UserPassesTestMixin):
+    """Using UserPassesTestMixin to provide access for author or admin"""
+    def test_func(self):
+        news = self.get_object()
+        return news.user == self.request.user or self.request.user.is_superuser
+
+
 def get_category(request, category_id):
     news = News.objects.filter(category=category_id, is_published=True)
     category = Category.objects.all()
@@ -50,7 +57,8 @@ class NewsCreateView(LoginRequiredMixin, BaseMixin, CreateView):
         return super(NewsCreateView, self).form_valid(form)
 
 
-class NewsUpdateView(UserPassesTestMixin, BaseMixin, UpdateView):
+class NewsUpdateView(BasePermission, BaseMixin, UpdateView):  # LoginRequiredMixin
+
     form_class = NewsForm
     model = News
     template_name = 'news/news_update.html'
@@ -59,13 +67,8 @@ class NewsUpdateView(UserPassesTestMixin, BaseMixin, UpdateView):
         form.instance.user = self.request.user
         return super(NewsUpdateView, self).form_valid(form)
 
-    def test_func(self):
-        """Using UserPassesTestMixin to provide access for author"""
-        news = self.get_object()
-        return news.user == self.request.user
 
-
-class NewsDeleteView(LoginRequiredMixin, BaseMixin, DeleteView):
+class NewsDeleteView(BasePermission, BaseMixin, DeleteView):  # LoginRequiredMixin
     model = News
     template_name = 'news/news_delete.html'
     context_object_name = 'news'
