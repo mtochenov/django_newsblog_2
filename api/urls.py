@@ -1,10 +1,13 @@
 from django.urls import path, re_path, include
+from rest_framework import routers
+
 from .views import *
 
+router = routers.SimpleRouter()
+router.register(r'', NewsViewSet)
 
 urlpatterns = [
-    path('', NewsAPIList.as_view()),
-    path('<int:pk>/', NewsAPIDetail.as_view()),
+    path('', include(router.urls)),
 
     path('api-auth/', include('rest_framework.urls')),
 
