@@ -9,23 +9,6 @@ from .permissions import IsOwnerOrReadOnly
 from .serializers import NewsSerializer
 
 
-class NewsAPIList(generics.ListCreateAPIView):
-    """GET, POST requests"""
-    queryset = News.objects.all()
-    serializer_class = NewsSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly, )
-
-
-class NewsAPIDetail(generics.RetrieveUpdateDestroyAPIView):
-    """GET, PUT, PATCH, DELETE requests"""
-    queryset = News.objects.all()
-    serializer_class = NewsSerializer
-    permission_classes = (IsOwnerOrReadOnly, )
-
-    def get_queryset(self):
-        return News.objects.filter(user=self.request.user)
-
-
 class NewsViewSet(ModelViewSet):
     """use all requests"""
     queryset = News.objects.all()
@@ -39,3 +22,20 @@ class NewsViewSet(ModelViewSet):
     def perform_update(self, serializer):
         serializer.validated_data['user'] = self.request.user
         serializer.save()
+
+
+# class NewsAPIList(generics.ListCreateAPIView):
+#     """GET, POST requests"""
+#     queryset = News.objects.all()
+#     serializer_class = NewsSerializer
+#     permission_classes = (IsAuthenticatedOrReadOnly, )
+
+
+# class NewsAPIDetail(generics.RetrieveUpdateDestroyAPIView):
+#     """GET, PUT, PATCH, DELETE requests"""
+#     queryset = News.objects.all()
+#     serializer_class = NewsSerializer
+#     permission_classes = (IsOwnerOrReadOnly, )
+#
+#     def get_queryset(self):
+#         return News.objects.filter(user=self.request.user)
